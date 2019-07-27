@@ -1,1 +1,20 @@
-<h1>Hello World</h1>
+<div class="container my-2">
+  <form action="/" method="POST">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="website">請輸入網址</label>
+        <input type="url" class="form-control" id="website" name="website" value="{{site.website}}" required>
+      </div>
+    </div>
+    <div class="d-inline-block">
+      <button type="submit" class="btn btn-primary">輸入</button>
+    </div>
+    <a href="/"><button class="btn btn-dark" type="button">返回</button></a>
+  </form>
+</div>
+
+{{#if site}}
+<div class="alert alert-info" role="alert">
+  <span class="mr-2">縮網址是:</span> <code>{{site.url}}</code>
+</div>
+{{/if}}
