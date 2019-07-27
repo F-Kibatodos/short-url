@@ -7,6 +7,10 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/shortened-urls')
+const db = mongoose.connection
+
 app.get('/', (req, res) => {
   res.render('index')
 })
