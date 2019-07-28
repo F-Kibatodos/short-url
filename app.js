@@ -12,10 +12,13 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/shortened-urls', {
-  useNewUrlParser: true,
-  useCreateIndex: true
-})
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://localhost/shortened-urls',
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  }
+)
 const db = mongoose.connection
 
 app.get('/', (req, res) => {
@@ -54,7 +57,7 @@ app.post('/', websiteValidator(), (req, res) => {
   }
 })
 
-app.listen(3000)
+app.listen(process.env.PORT || 3000)
 
 /*
 app.post('/', (req, res) => {
