@@ -6,7 +6,8 @@ const urlSchema = new mongoose.Schema({
   },
   url: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 })
 module.exports = mongoose.model('Url', urlSchema)
