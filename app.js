@@ -4,6 +4,8 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const generateRandomString = require('./generate-random')
 const Url = require('./models/url')
+const { check, validationResult } = require('express-validator')
+const websiteValidator = require('./website-validator')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -20,16 +22,23 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-app.post('/', (req, res) => {
+app.post('/', websiteValidator(), (req, res) => {
   const website = req.body.website
-  let errorMsg = ''
-  if (website.includes('https') === false) {
-    errorMsg += '請勿空白或填入非網址'
-    res.render('index', { errorMsg })
+  const errors = validationResult(req)
+  let loginErrors = ''
+  if (!errors.isEmpty()) {
+    for (let errormessage of errors.errors) {
+      loginErrors += errormessage.msg
+    }
+  }
+  if (loginErrors) {
+    res.render('index', {
+      loginErrors
+    })
   } else {
     Url.findOne({ website }).then(site => {
       if (site) {
-        res.render('index', { site, errorMsg })
+        res.render('index', { site })
       } else {
         let randomString = generateRandomString()
         const newUrl = new Url({
@@ -38,7 +47,7 @@ app.post('/', (req, res) => {
         })
         newUrl.save((err, site) => {
           if (err) return console.error(err)
-          res.render('index', { site, errorMsg })
+          res.render('index', { site })
         })
       }
     })
