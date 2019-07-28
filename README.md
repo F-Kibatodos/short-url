@@ -63,7 +63,7 @@ npm run dev                                              // 執行專案
 
 ## Heroku
 
-本程式已在 Heroku[部署](https://boiling-ridge-88039.herokuapp.com/)
+本程式已在 Heroku[部署](https://rocky-brook-46774.herokuapp.com/)
 
 ## 功能說明
 
