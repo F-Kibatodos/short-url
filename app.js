@@ -61,6 +61,10 @@ app.get('/:url', (req, res) => {
   const url = req.params.url
   Url.findOne({ url }).then(site => {
     if (site) res.redirect(site.website)
+    else {
+      let urlErrorMsg = '找不到該網址'
+      res.render('index', { urlErrorMsg })
+    }
   })
 })
 

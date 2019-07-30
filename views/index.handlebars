@@ -7,6 +7,14 @@
     </button>
   </div>
   {{/if}}
+  {{#if urlErrorMsg}}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{urlErrorMsg}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+  {{/if}}
   <form action="/" method="POST">
     <div class="form-row">
       <div class="form-group col-md-6">
@@ -22,6 +30,6 @@
 
 {{#if site}}
 <div class="alert alert-info" role="alert">
-  <span class="mr-2">縮網址是:</span> <a href="/{{site.url}}"><code>https://localhost:3000/{{site.url}}</code></a>
+  <span class="mr-2">縮網址是:</span><code>http://rocky-brook-46774.herokuapp.com/{{site.url}}</code>
 </div>
 {{/if}}
