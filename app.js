@@ -44,13 +44,18 @@ app.post('/', websiteValidator(), (req, res) => {
         res.render('index', { site })
       } else {
         let randomString = generateRandomString()
-        const newUrl = new Url({
-          website: website,
-          url: randomString
-        })
-        newUrl.save((err, site) => {
-          if (err) return console.error(err)
-          res.render('index', { site })
+        Url.findOne({ url: randomString }).then(target => {
+          while (target) {
+            randomString = generateRandomString()
+          }
+          const newUrl = new Url({
+            website,
+            url: randomString
+          })
+          newUrl.save((err, site) => {
+            if (err) console.error(err)
+            res.render('index', { site })
+          })
         })
       }
     })
