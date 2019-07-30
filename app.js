@@ -43,19 +43,14 @@ app.post('/', websiteValidator(), (req, res) => {
       if (site) {
         res.render('index', { site })
       } else {
-        let randomString = generateRandomString()
-        Url.findOne({ url: randomString }).then(target => {
-          while (target) {
-            randomString = generateRandomString()
-          }
-          const newUrl = new Url({
-            website,
-            url: randomString
-          })
-          newUrl.save((err, site) => {
-            if (err) console.error(err)
-            res.render('index', { site })
-          })
+        let randomString = generateRandom()
+        const newUrl = new Url({
+          website,
+          url: randomString
+        })
+        newUrl.save((err, site) => {
+          if (err) console.error(err)
+          res.render('index', { site })
         })
       }
     })
@@ -74,6 +69,15 @@ app.get('/:url', (req, res) => {
 })
 
 app.listen(process.env.PORT || 3000)
+
+// 驗證如果亂數重複並重新生成亂數
+const generateRandom = () => {
+  let randomString = generateRandomString()
+  Url.findOne({ url: randomString }).then(target => {
+    if (target) return generateRandom()
+  })
+  return randomString
+}
 
 /*
 app.post('/', (req, res) => {
