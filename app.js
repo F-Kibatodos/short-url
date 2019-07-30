@@ -57,6 +57,13 @@ app.post('/', websiteValidator(), (req, res) => {
   }
 })
 
+app.get('/:url', (req, res) => {
+  const url = req.params.url
+  Url.findOne({ url }).then(site => {
+    if (site) res.redirect(site.website)
+  })
+})
+
 app.listen(process.env.PORT || 3000)
 
 /*
