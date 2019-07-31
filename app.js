@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-app.post('/', websiteValidator(), (req, res) => {
+app.post('/', websiteValidator(), async (req, res) => {
   const website = req.body.website
   const errors = validationResult(req)
   let loginErrors = ''
@@ -39,21 +39,16 @@ app.post('/', websiteValidator(), (req, res) => {
       loginErrors
     })
   } else {
-    Url.findOne({ website }).then(site => {
-      if (site) {
-        res.render('index', { site })
-      } else {
-        let randomString = generateRandom()
-        const newUrl = new Url({
-          website,
-          url: randomString
-        })
-        newUrl.save((err, site) => {
-          if (err) console.error(err)
-          res.render('index', { site })
-        })
+    const website = req.body.website
+    let site = await Url.findOne({ website })
+    if (!site) {
+      let url = generateRandomString()
+      while (await Url.findOne({ url })) {
+        url = generateRandomString()
       }
-    })
+      site = await Url.create({ website, url })
+    }
+    return res.render('index', { site })
   }
 })
 
@@ -71,13 +66,6 @@ app.get('/:url', (req, res) => {
 app.listen(process.env.PORT || 3000)
 
 // 驗證如果亂數重複並重新生成亂數
-const generateRandom = () => {
-  let randomString = generateRandomString()
-  Url.findOne({ url: randomString }).then(target => {
-    if (target) return generateRandom()
-  })
-  return randomString
-}
 
 /*
 app.post('/', (req, res) => {
